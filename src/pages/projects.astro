@@ -1,0 +1,114 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<html lang="en">
+  <head>
+    <BaseHead
+      title="Projects | HiHorton"
+      description="Portfolio projects and build logs from my AWS + homelab journey."
+    />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class="card">
+        <h1>Projects</h1>
+        <p class="muted">
+          Real builds, documented. Each project links to the write-up and the source.
+        </p>
+
+        <div class="grid">
+          <article class="project">
+            <h2>Static Site + Blog on AWS</h2>
+            <ul>
+              <li>S3 private buckets (OAC)</li>
+              <li>CloudFront CDN + HTTPS (ACM)</li>
+              <li>Cloudflare DNS + redirects</li>
+              <li>AWS Budgets + SNS alerts</li>
+            </ul>
+            <div class="links">
+              <a href="/blog/02-building-blog-in-aws/">Read the build log →</a>
+              <a href="https://github.com/hihorton/hihorton-site" target="_blank" rel="noreferrer">Source (GitHub) →</a>
+            </div>
+          </article>
+
+          <article class="project">
+            <h2>Homelab Remote Access Gateway</h2>
+            <p class="muted">
+              Gateway page linking to private services (future: authenticated access).
+            </p>
+            <div class="links">
+              <a href="/">View homepage →</a>
+            </div>
+          </article>
+
+          <article class="project">
+            <h2>Next Up: VPC + Private Services</h2>
+            <p class="muted">
+              Build a lab VPC pattern (public ALB + private app subnets + VPC endpoints) and document it.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+}
+
+h1 {
+  margin: 0 0 0.5rem 0;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.project {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.project h2 {
+  margin: 0 0 10px 0;
+  font-size: 1.1rem;
+}
+
+.project ul {
+  margin: 0.5rem 0 0 1.2rem;
+  color: var(--muted);
+}
+
+.links {
+  display: flex;
+  gap: 14px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.links a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.links a:hover {
+  text-decoration: underline;
+}
+</style>
