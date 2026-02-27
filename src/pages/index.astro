@@ -5,45 +5,90 @@ import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <title>HiHorton | Secure Gateway</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Secure access gateway for HiHorton services.">
+
+    <!-- JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 40px;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .sub {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        .button {
+            display: block;
+            background: transparent;
+            border: 1px solid #38bdf8;
+            color: #38bdf8;
+            padding: 14px;
+            margin: 12px 0;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: 0.2s ease;
+        }
+
+        .button:hover {
+            background: #38bdf8;
+            color: #0f172a;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 0.8rem;
+            color: #475569;
+        }
+
+        .prompt {
+            color: #38bdf8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1><span class="prompt">></span> hihorton_gateway</h1>
+    <div class="sub">Secure hybrid cloud access node</div>
+
+    <!-- Replace these with your real subdomains -->
+    <a class="button" href="/blog">/blog</a>
+    <a class="button" href="/projects">/projects</a>
+    <a class="button" href="/about">/about</a>
+    <a class="button" href="/lab">/lab: RESTRICTED ACCESS</a>
+
+    <div class="footer">
+        AWS S3 + CloudFront | Cloudflare Tunnel | On-Prem Infrastructure
+    </div>
+</div>
+
+</body>
 </html>

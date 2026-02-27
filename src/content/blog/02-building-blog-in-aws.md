@@ -1,7 +1,8 @@
 ---
-title: "How I Built blog.hihorton.com with AWS"
-pubDate: 2026-02-27
-description: "Using S3, CloudFront, ACM, Cloudflare, and Astro to build a production-ready blog."
+title: 'How I Built blog.hihorton.com with AWS'
+pubDate: 'Feb 26 2026'
+description: 'Using S3, CloudFront, ACM, Cloudflare, and Astro to build a production-ready blog.'
+heroImage: '../../assets/blog02.jpg'
 ---
 
 ## Why I Built This

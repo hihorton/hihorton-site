@@ -1,7 +1,8 @@
 ---
-title: "My AWS Journey Begins"
-pubDate: 2026-02-26
-description: "Moved hihorton.com to S3 + CloudFront and started building a real cloud portfolio."
+title: 'My AWS Journey Begins'
+pubDate: ' Feb 25 2026'
+description: 'Moved hihorton.com to S3 + CloudFront and started building a real cloud portfolio.'
+heroImage: '../../assets/blog01.jpg'
 ---
 
 Today I moved **hihorton.com** to AWS using:
