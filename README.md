@@ -1,62 +1,144 @@
-# Astro Starter Kit: Blog
+# hihorton-site
 
-```sh
-npm create astro@latest -- --template blog
+Personal website and cloud lab project for **Michael Horton**.\
+Built with Astro and deployed on AWS as part of my Cloud Computing
+specialization journey.
+
+This project serves two purposes:
+
+1.  A personal website (hihorton.com)\
+2.  A hands-on AWS lab environment for learning real-world cloud
+    architecture
+
+------------------------------------------------------------------------
+
+## 🚀 Tech Stack
+
+-   **Astro** -- Static site framework\
+-   **Node.js** -- Build environment\
+-   **AWS S3** -- Static site hosting\
+-   **AWS CloudFront** -- CDN + HTTPS\
+-   **AWS IAM** -- Access control\
+-   **AWS CLI** -- Deployment automation\
+-   *(Planned)* CloudFront Logs + Athena for analytics
+
+------------------------------------------------------------------------
+
+## 🏗 Architecture Overview
+
+Astro build\
+↓\
+`dist/` output\
+↓\
+AWS S3 (static hosting bucket)\
+↓\
+CloudFront distribution\
+↓\
+hihorton.com
+
+### Planned Enhancements
+
+-   CloudFront access logging to S3\
+-   Athena queries for traffic analysis\
+-   WAF integration\
+-   CI/CD via GitHub Actions
+
+------------------------------------------------------------------------
+
+## 📦 Local Development
+
+Install dependencies:
+
+``` bash
+npm install
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Run development server:
 
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+``` bash
+npm run dev
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Build production files:
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+``` bash
+npm run build
+```
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+Preview production build:
 
-Any static assets, like images, can be placed in the `public/` directory.
+``` bash
+npm run preview
+```
 
-## 🧞 Commands
+------------------------------------------------------------------------
 
-All commands are run from the root of the project, from a terminal:
+## 🚀 Deployment Script
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+Deployment is automated via a custom Fish shell script:
 
-## 👀 Want to learn more?
+``` fish
+#!/usr/bin/env fish
+set -l DIST_ID E3GKBJLB8I360P
+set -l BUCKET hihorton.com
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+echo "Building Astro…"
+npm run build; or exit 1
 
-## Credit
+echo "Syncing dist/ to S3: $BUCKET…"
+aws s3 sync ./dist s3://$BUCKET --delete; or exit 1
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+echo "Invalidating CloudFront: $DIST_ID…"
+aws cloudfront create-invalidation --distribution-id $DIST_ID --paths "/*"; or exit 1
+
+echo "Deployed: https://$BUCKET"
+```
+
+This script: 1. Builds the site\
+2. Syncs to S3\
+3. Invalidates CloudFront cache
+
+------------------------------------------------------------------------
+
+## 🎯 Purpose
+
+This site is intentionally simple.
+
+It exists as:
+
+-   A cloud engineering sandbox\
+-   A resume-supporting project\
+-   A foundation for future infrastructure experiments
+
+As I progress toward AWS certifications (SAA → Security → DevOps), this
+repository will evolve alongside my skills.
+
+------------------------------------------------------------------------
+
+## 📈 Roadmap
+
+-   [ ] Enable CloudFront logging\
+-   [ ] Build Athena traffic dashboard\
+-   [ ] Configure AWS WAF\
+-   [ ] Implement GitHub Actions CI/CD\
+-   [ ] Expand blog content\
+-   [ ] Add architecture diagram
+
+------------------------------------------------------------------------
+
+## 🧠 Why This Exists
+
+This project serves as proof of applied cloud knowledge.
+
+Instead of only studying AWS, this repository demonstrates:
+
+-   Infrastructure design\
+-   IAM best practices\
+-   Deployment automation\
+-   Scalability and cost awareness
+
+------------------------------------------------------------------------
+
+## 📜 License
+
+Personal project --- not licensed for redistribution.
