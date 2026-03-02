@@ -7,136 +7,50 @@ heroImage: '../../assets/blog04.jpg'
 
 Every time I made a change to my site, I had to do two things.
 
-Push the code to GitHub.
+Push the code to GitHub, then run my deploy script.
 
-Then run my deploy script.
-
-It worked.
-
-But it was manual.
-
-And one of those steps was redundant.
+It worked, but I was already pushing to GitHub anyway. Running the script separately was a redundant step I had to remember every single time.
 
 ---
 
 ## The Old Way
 
-I had a fish shell script that did three things:
+I had a fish shell script that built the Astro site, synced the output to S3, and invalidated the CloudFront cache. Every deploy meant opening a terminal and running it by hand.
 
-1. Build the Astro site
-2. Sync the output to S3
-3. Invalidate the CloudFront cache
-
-Every deploy meant opening a terminal, navigating to the project, and running it by hand.
-
-It wasn't broken.
-
-But it wasn't automated either.
+It wasn't broken. But the more I learned about CI/CD the more it felt like I was halfway there and stopping short.
 
 ---
 
-## The Problem I Noticed
+## What I Changed
 
-GitHub already had my code.
+I added a workflow file at `.github/workflows/deploy.yml` that runs the same steps automatically whenever I push to `main`. GitHub spins up an environment, installs dependencies, builds the site, syncs to S3, and invalidates the cache.
 
-Every push was version controlled, tracked, backed up.
-
-But the actual deployment still depended on me remembering to run a script.
-
-That's not a pipeline.
-
-That's just a habit.
+Same process as the script. Just no longer something I have to think about.
 
 ---
 
-## What CI/CD Actually Means
+## The Security Side
 
-CI/CD stands for Continuous Integration / Continuous Deployment.
+Moving to GitHub Actions also pushed me to fix something I had been ignoring.
 
-The idea is simple:
+My deploy script had the S3 bucket name and CloudFront distribution ID sitting in plaintext. Not credentials, but still information I didn't need in my codebase.
 
-When you push code → it builds → it deploys. Automatically.
+With GitHub Actions those values live as encrypted repository secrets. I also created a separate IAM user specifically for deployments — scoped only to S3 and CloudFront, nothing else. My personal admin account stays separate from anything automated.
 
-No extra steps.
-No manual triggers.
-No forgetting.
-
-GitHub Actions is the tool that makes this happen inside your GitHub repo.
+It's the same principle I've been applying elsewhere. The deploy process shouldn't carry more access than it actually needs.
 
 ---
 
-## What I Built
+## What I Took Away
 
-I added a workflow file at `.github/workflows/deploy.yml`.
+The automation itself was straightforward once I understood what was happening. The more interesting part was realizing how much of the security improvement came as a side effect of doing it the right way — credentials out of the codebase, least privilege IAM user, no manual steps that could be skipped or forgotten.
 
-Now when I push to `main`:
-
-1. GitHub spins up a fresh Ubuntu environment
-2. Installs Node.js
-3. Runs `npm ci` to install dependencies
-4. Builds the Astro site
-5. Syncs the output to S3
-6. Invalidates the CloudFront cache
-
-The same steps my script was doing.
-
-Just automatic.
-
----
-
-## The Security Upgrade
-
-My old script had my S3 bucket name and CloudFront distribution ID sitting in plaintext.
-
-Anyone who could read my script could see them.
-
-With GitHub Actions, those values are stored as **repository secrets** — encrypted, never exposed in code.
-
-I also created a dedicated IAM user just for deployments.
-
-Not my personal admin account.
-
-A separate user with one policy: access only to S3 and CloudFront.
-
-Nothing else.
-
-This is called **least privilege** — only grant what's needed to do the job.
-
-If those credentials ever leaked, the damage would be limited.
-
-That's the right way to do it.
-
----
-
-## The New Flow
-
-Before:
-
-```
-git push → manually run deploy script → site updates
-```
-
-After:
-
-```
-git push → site updates
-```
-
-That's it.
-
----
-
-## What I Learned
-
-- CI/CD isn't complicated. It's just automation applied to deployment.
-- Least privilege matters even on personal projects. Build the habit now.
-- GitHub Secrets keep sensitive values out of your codebase.
-- A push to `main` should mean something. Now it does.
+Pushing to `main` now means the site is updated. That's it.
 
 ---
 
 ## What's Next
 
-- Add CloudWatch monitoring to track traffic and errors
-- Build a serverless contact form using Lambda + API Gateway + SES
-- Document the full architecture with a diagram
+- CloudWatch monitoring for traffic and errors
+- Serverless contact form with API Gateway + Lambda + SES
+- Full architecture diagram

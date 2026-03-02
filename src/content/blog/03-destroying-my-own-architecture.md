@@ -1,117 +1,52 @@
 ---
 title: 'I Built It… Then I Deleted It'
-description: 'How I built blog.hihorton.com, realized it was overcomplicated, and rebuilt everything simpler.'
+description: 'How I built hihorton.com, realized it was overcomplicated, and rebuilt everything simpler.'
 pubDate: 'Feb 27 2026'
 heroImage: '../../assets/blog03.jpg'
 ---
 
 Yesterday I was feeling pretty proud.
 
-I had:
-
-- A landing page at `hihorton.com`
-- A blog at `blog.hihorton.com`
-- Two S3 buckets
-- Two CloudFront distributions
-- DNS records wired up
-- Deploy scripts working
+I had a landing page at `hihorton.com`, a blog at a separate subdomain, two S3 buckets, two CloudFront distributions, DNS records wired up, and deploy scripts working.
 
 It felt official.
 
-Then today… I deleted half of it.
+Then today I deleted half of it.
 
 ---
 
-## What Happened?
+## What Happened
 
-When I first built this, I separated everything:
+When I first built this I separated everything. Landing page in one bucket, blog in another, separate distributions, separate DNS records.
 
-- Landing page → one bucket
-- Blog → different bucket
-- Separate CloudFront distributions
-- Separate DNS records
+At the time it made sense. It felt organized.
 
-At the time, it made sense to me.
+But the more I worked with it the more I realized I was making it more complicated than it needed to be. I kept asking myself why I was maintaining two distributions, deploying to two buckets, managing extra DNS records.
 
-It felt organized.
-
-But the more I worked with it, the more I realized something:
-
-I was making it more complicated than it needed to be.
-
----
-
-## The Realization
-
-This isn’t a company website.
-
-It’s just me.
-
-I don’t have multiple teams.
-I don’t need isolated environments.
-I don’t need subdomain separation.
-
-I just need:
-
-hihorton.com
-
-That’s it.
-
-So I started asking myself:
-
-Why am I maintaining two distributions?
-Why am I deploying to two buckets?
-Why am I managing extra DNS records?
-
-Answer: I didn’t need to.
+This isn't a company with multiple teams or isolated environments. It's just me and one domain.
 
 ---
 
 ## So I Rebuilt It
 
-I moved everything into one S3 bucket:
+I moved everything into one S3 bucket. The blog lives at `/blog`, one CloudFront distribution, one deploy script, one place to manage everything.
 
-- `hihorton.com`
-- Blog lives at `/blog`
-- One CloudFront distribution
-- One deploy script
-- One origin
-- One place to manage everything
+Then I deleted the old bucket, the old distribution, and the extra DNS record.
 
-Then I deleted:
-
-- The old blog bucket
-- The old CloudFront distribution
-- The extra DNS record
-
-It felt slightly terrifying.
-But also… cleaner.
+It felt slightly terrifying. But also cleaner.
 
 ---
 
-## What I Learned
+## What I Took Away
 
-I’m still new to all of this.
+Just because something works doesn't mean it's the right design. I went back and asked whether the complexity I added was solving a real problem or just something I carried over from how I imagined it should look.
 
-But here’s what this taught me:
+It wasn't. So I simplified it.
 
-- Just because something works doesn’t mean it’s the best design.
-- Simpler is usually better.
-- Deleting infrastructure is part of learning.
-- I understand CloudFront way better now than I did yesterday.
-
-Most importantly:
-
-It’s okay to rebuild things.
+Deleting infrastructure I built myself was a weird feeling but it taught me more about how CloudFront actually works than building it the first time did.
 
 ---
 
-## Why I’m Documenting This
+## Why I'm Writing This Down
 
-I don’t want this blog to just show finished projects.
-
-I want it to show the process.
-
-The confusion.
-The rebuilding.
-The moments where something works… but could be better.
+I don't want this blog to only show finished things. The rebuilding and the moments where something works but could be better are just as worth documenting.

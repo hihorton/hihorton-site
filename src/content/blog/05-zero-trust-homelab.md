@@ -1,148 +1,48 @@
 ---
-title: 'Locking Down My Homelab with Zero Trust'
-description: 'How I stopped exposing services directly to the internet and added real authentication using Cloudflare Tunnel and Cloudflare Access.'
+title: 'Locking Down My Homelab'
+description: 'Adding Cloudflare Access in front of my homelab services and learning what Zero Trust actually means in practice.'
 pubDate: 'Mar 02 2026'
 heroImage: '../../assets/blog05.jpg'
 ---
 
-I had a problem.
+I've been running a few internal services on my homelab, exposed through Cloudflare Tunnel so I can reach them remotely.
 
-I was exposing internal services to the internet.
+The tunnel itself gives me an encrypted connection without opening ports on my router, which I liked. Outbound only. Nothing listening on my network from the outside.
 
-The only thing standing between a stranger and my homelab was a login screen tied to Plex credentials.
+But there was still a problem.
 
-That's it.
+Anyone who found one of my subdomains could hit the login page. The only thing stopping them was whatever auth the app had built in.
 
-Just a lock on the front door.
-
----
-
-## The Setup I Had
-
-I run services on my homelab — things like Overseerr, accessible through a subdomain.
-
-Cloudflare Tunnel handled the connection, which meant traffic was encrypted in transit.
-
-But here's what I didn't think hard enough about:
-
-Anyone who knew or stumbled across that subdomain could reach the login page.
-
-Encrypted connection.
-
-Still publicly reachable.
-
-That's not good enough.
-
----
-
-## Why I Didn't Just Forward a Port
-
-I could have exposed a local port directly to the internet.
-
-I chose not to.
-
-Port forwarding means punching a hole in your network and pointing it at a device in your home.
-
-Anyone scanning for open ports could find it.
-
-Cloudflare Tunnel works differently — it creates an **outbound-only connection** from my server to Cloudflare.
-
-Nothing is listening on my router.
-No open ports.
-No hole in the wall.
-
-The tunnel reaches out. It doesn't let anything in uninvited.
-
-That felt right.
-
-But I still needed to control who could reach what was on the other side.
-
----
-
-## What Zero Trust Actually Means
-
-Zero Trust is a security model.
-
-The idea is simple: don't trust anyone by default, even if they're already inside your network.
-
-Every access request gets verified.
-Every user gets the minimum access they need.
-Nothing more.
-
-I think about it like this:
-
-I have a doctor's appointment on the 4th floor.
-I'm given an elevator key that only goes to the 4th floor.
-Not the 3rd. Not the 5th. Just where I need to be.
-
-That's Zero Trust.
+That felt like one lock on a door I'd rather keep hidden entirely.
 
 ---
 
 ## What I Added
 
-**Cloudflare Access.**
+Cloudflare Access sits in front of the tunnel and intercepts requests before they ever reach the app.
 
-It sits in front of my tunnel and adds an authentication wall before anyone reaches a service.
+Now when I navigate to one of my subdomains, Cloudflare prompts for authentication first — a one-time PIN sent to an approved email. If your email isn't on the list, you never see the app.
 
-Now when someone hits `seerr.hihorton.com`:
-
-1. Cloudflare intercepts the request
-2. They get a login prompt — not my app's login, Cloudflare's
-3. A one-time PIN is sent to an approved email
-4. Only then do they reach the service
-
-If your email isn't on the list, you don't get in.
-
-The app never even sees the request.
+Setup was straightforward. I created a policy in Cloudflare Zero Trust, attached it to the application, and that was it.
 
 ---
 
-## Why This Is Better
+## Why This Matters to Me
 
-Before:
+I've been reading about Zero Trust as a concept and this was the first time I actually implemented something that fits the model.
 
-```
-Anyone → subdomain → login screen → inside
-```
+The way I understand it: don't assume access should be granted just because someone is at the door. Verify first, and only give access to what's needed.
 
-After:
+I think about it like having a doctor's appointment on the 4th floor. You get an elevator key that only goes to the 4th floor. Not the whole building — just where you need to be.
 
-```
-Anyone → Cloudflare Access → verified email only → login screen → inside
-```
-
-Two layers now.
-
-Cloudflare handles the first one before my app is ever involved.
+That's roughly what I set up here. Each service gets its own application in Cloudflare Access, scoped to only the people who should reach it.
 
 ---
 
-## Scaling This Going Forward
+## Going Forward
 
-The real value here is how it scales.
+As I add more services to my homelab the pattern stays the same — tunnel plus Access policy before anything is reachable. It's a habit I want to build now rather than go back and retrofit later.
 
-As I add more services to my homelab, each one gets a subdomain and gets put behind the same Access policy.
+It also made me think more carefully about the AWS side of things. I've been applying similar thinking there — IAM users scoped to only what they need, credentials that never live in code. Same idea, different context.
 
-New service → tunnel → Access policy applied → done.
-
-I don't have to think about auth for every individual app.
-
-One policy. Every service covered.
-
----
-
-## What I Learned
-
-- An encrypted connection isn't the same as a secure one. Encryption protects data in transit. Access controls protect what's on the other end.
-- Outbound-only tunnels are cleaner and safer than port forwarding.
-- Zero Trust isn't just an enterprise concept. It applies at any scale.
-- Adding security in layers means no single failure exposes everything.
-
----
-
-## What's Next
-
-- Cloudwatch monitoring for my AWS infrastructure
-- Serverless contact form with API Gateway + Lambda + SES
-- Document the full homelab architecture
+Still a lot to learn but this felt like a meaningful step.
