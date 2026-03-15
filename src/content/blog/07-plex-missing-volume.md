@@ -2,7 +2,7 @@
 title: "The Plex Database Kept Breaking. Turns Out I Never Finished Setting It Up."
 description: "I'd deleted the same two corrupted files twice without knowing why. Digging into the logs finally showed me what was actually wrong."
 pubDate: 2026-03-14
-heroImage: "blog07.jpg"
+heroImage: "../../assets/blog07.jpg"
 ---
 
 Plex was down again.
